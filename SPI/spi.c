@@ -2,10 +2,26 @@
 #include "spi.h"
 #include <xc.h>
 
+#ifndef SSDDR
+#define SSDDR DDRB
+#endif
+
+#ifndef SSDDRN
+#define SSDDRN 2
+#endif
+
+#ifndef SSPORT
+#define SSPORT PORTB
+#endif
+
+#ifndef SSPORTN
+#define SSPORTN PORTB2
+#endif
+
 void spi_enable() {
-	SPCR |= (1 << SPE) | (1 << MSTR) | (1 << SPR0);
-	DDRB |= (1 << 5) | (1 << 3) | (1 << 2);
-	DDRB &= ~(1 << 4);
+	SPCR = (1 << SPE) | (1 << MSTR);
+	SSDDR |= (1 << SSDDRN);
+	DDRB |= (1 << 3) | (1 << 5);
 }
 
 void spi_set_order(uint8_t order) {
@@ -55,9 +71,7 @@ void spi_interrupt_disable() {
 }
 
 uint8_t spi_transfer_done() {
-	return (SPSR >> SPIF) & 1;
-	uint8_t result = SPSR & (1 << SPIF);
-	return result >> SPIF;
+	return SPSR & (1 << SPIF);
 }
 
 uint8_t spi_transfer_collision() {
@@ -69,14 +83,13 @@ uint8_t spi_set_data(uint8_t data) {
 	while (!spi_transfer_done()) {
 		;
 	}
-	data = SPDR;
-	return data;
+	return SPDR;
 }
 
 void spi_select() {
-	PORTB |= 1 << PORTB2;
+	SSPORT &= ~(1 << SSPORTN);
 }
 
 void spi_deselect() {
-	PORTB &= ~(1 << PORTB2);
+	SSPORT |= 1 << SSPORTN;
 }
