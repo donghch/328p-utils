@@ -112,18 +112,6 @@
 #define LCD1602_D2_PN PORTD2
 #endif
 
-#ifndef LCD1602_D2_D
-#define LCD1602_D2_D DDRD
-#endif
-
-#ifndef LCD1602_D2_P
-#define LCD1602_D2_P PORTD
-#endif
-
-#ifndef LCD1602_D2_PN
-#define LCD1602_D2_PN PORTD2
-#endif
-
 #ifndef LCD1602_D1_D
 #define LCD1602_D1_D DDRD
 #endif
@@ -145,7 +133,7 @@
 #endif
 
 #ifndef LCD1602_D0_PN
-#define LCD1602_D0_PN PORTD7
+#define LCD1602_D0_PN PORTD0
 #endif
 
 /* Options definitions */
@@ -192,6 +180,10 @@ void lcd1602_set_ddram_addr(uint8_t data);
 void lcd1602_write_ram(uint8_t data);
 
 uint8_t lcd1602_read_ram();
+
+void lcd1602_set_data(uint8_t data);
+
+void lcd1602_send_data();
 
 
 #endif /* _LCDLCD1602_H_ */
